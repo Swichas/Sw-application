@@ -141,65 +141,65 @@ CreateThread(function()
     end
 end)
 
-
 RegisterNetEvent('np-anketos:Client:anketa', function()
-
     local PlayerData = QBCore.Functions.GetPlayerData()
-    local darbas = PlayerData.job.name
-    QBCore.Functions.TriggerCallback('aplikacijosgavimas', function(data)
-        if not data or #data == 0 then
-            TriggerEvent('QBCore:Notify',       Lang:t('bossmenu.noaplication') , 'error', 5)
+    local jobName = PlayerData.job.name
+    local jobGrade = PlayerData.job.grade 
 
-            return
-        end
-
-        pagrindomnenu = {}
-
-        for _, application in ipairs(data) do
-            if application.arpasiruoses == 1 then
-                arpasiruoses = Lang:t('bossmenu.yes')
-            else
-                arpasiruoses = Lang:t('bossmenu.no')
+    if Config.BossRanks[jobName] and jobGrade >= Config.BossRanks[jobName] then
+        QBCore.Functions.TriggerCallback('aplikacijosgavimas', function(data)
+            if not data or #data == 0 then
+                TriggerEvent('QBCore:Notify', Lang:t('bossmenu.noaplication'), 'error', 5)
+                return
             end
-            table.insert(pagrindomnenu, {
-                title = application.vardas .. " " .. application.pavarde,
-                description = Lang:t('bossmenu.context'):format(application.vardas,application.pavarde,application.metai,application.telefonas,arpasiruoses,application.patirtis),
-                onSelect = function()
-                    lib.registerContext({
-                        id = 'deleteConfirm',
-                        title = Lang:t('bossmenu.aresure'),
-                        description = Lang:t('bossmenu.aresure2'),
-                        options = {
-                            {
-                                title = Lang:t('bossmenu.areusureyes'),
-                                onSelect = function()
-                                    TriggerServerEvent('istrintiAplikacija', application.vardas, application.pavarde)
-                                    bosas() 
-                                end,
-                            },
-                            {
-                                title = Lang:t('bossmenu.areusureno'),
-                                onSelect = function()
-                                    bosas() 
-                                end,
-                            },
-                        }
-                    })
-                    lib.showContext('deleteConfirm')
-                end,
+
+            pagrindomnenu = {}
+
+            for _, application in ipairs(data) do
+                local arpasiruoses = application.arpasiruoses == 1 and Lang:t('bossmenu.yes') or Lang:t('bossmenu.no')
+                
+                table.insert(pagrindomnenu, {
+                    title = application.vardas .. " " .. application.pavarde,
+                    description = Lang:t('bossmenu.context'):format(application.vardas, application.pavarde, application.metai, application.telefonas, arpasiruoses, application.patirtis),
+                    onSelect = function()
+                        lib.registerContext({
+                            id = 'deleteConfirm',
+                            title = Lang:t('bossmenu.aresure'),
+                            description = Lang:t('bossmenu.aresure2'),
+                            options = {
+                                {
+                                    title = Lang:t('bossmenu.areusureyes'),
+                                    onSelect = function()
+                                        TriggerServerEvent('istrintiAplikacija', application.vardas, application.pavarde)
+                                        bosas()
+                                    end,
+                                },
+                                {
+                                    title = Lang:t('bossmenu.areusureno'),
+                                    onSelect = function()
+                                        bosas()
+                                    end,
+                                },
+                            }
+                        })
+                        lib.showContext('deleteConfirm')
+                    end,
+                })
+            end
+
+            lib.registerContext({
+                id = 'Bossmenuaplikacijs',
+                title = Lang:t('bossmenu.conexttable'),
+                options = pagrindomnenu
             })
-        end
+            
+            lib.showContext('Bossmenuaplikacijs')
 
-        lib.registerContext({
-            id = 'Bossmenuaplikacijs',
-            title = Lang:t('bossmenu.conexttable'),
-            options = pagrindomnenu
-        })
-        
-        lib.showContext('Bossmenuaplikacijs')
-
-    end,darbas)
+        end, jobName)
+    else
+    end
 end)
+
 
 
 
