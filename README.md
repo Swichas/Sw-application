@@ -1,6 +1,6 @@
 # Sw-application
 This a upgraded version of mycroft-jobforms
-# installion 
+# installation 
 Make sure to have Qb-core and Ox_lib installed
 # SQL
 
