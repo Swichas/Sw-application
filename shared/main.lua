@@ -29,7 +29,10 @@ Config.Areas = {
         },
     }
 }
+Config.BossRanks = {
+    police = 1, 
 
+}
 Config.ApplicationSettings = {
     Cooldown = {
         enabled = true,
