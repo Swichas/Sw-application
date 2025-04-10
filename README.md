@@ -17,3 +17,4 @@ CREATE TABLE `aplikacijos` (
 insert this into database
 
 # CREDITS https://github.com/Mycroft-Studios/mycroft-jobforms
+# to open type /bossmenu
