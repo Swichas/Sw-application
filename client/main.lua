@@ -144,9 +144,10 @@ end)
 RegisterNetEvent('np-anketos:Client:anketa', function()
     local PlayerData = QBCore.Functions.GetPlayerData()
     local jobName = PlayerData.job.name
-    local jobGrade = PlayerData.job.grade 
+    local jobGrade = PlayerData.job.grade.level
 
-    if Config.BossRanks[jobName] and jobGrade >= Config.BossRanks[jobName] then
+    if jobGrade == Config.BossRanks[jobName] then
+
         QBCore.Functions.TriggerCallback('aplikacijosgavimas', function(data)
             if not data or #data == 0 then
                 TriggerEvent('QBCore:Notify', Lang:t('bossmenu.noaplication'), 'error', 5)
@@ -194,7 +195,6 @@ RegisterNetEvent('np-anketos:Client:anketa', function()
             })
             
             lib.showContext('Bossmenuaplikacijs')
-
         end, jobName)
     else
     end
